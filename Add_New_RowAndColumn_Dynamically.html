@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"
+        defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+    <input class="btn btn-primary" type="button" value="Add" id="btnAdd">
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">field</th>
+                <th scope="col">Show</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>
+                    <select class="form-select mySelect" id="mySelect1">
+                        <option selected>Open this select menu</option>
+                        <option value="1">Text</option>
+                        <option value="2">Button</option>
+                        <option value="3">Color</option>
+                    </select>
+                </td>
+
+                <td>
+                    <div class="form-floating resultContainer" id="divRow1">
+                        <textarea class="form-control" placeholder="Leave a comment here"
+                            id="floatingTextarea"></textarea>
+                        <label for="floatingTextarea">Comments</label>
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <script>
+
+        ///// Calling Js function From Jquery/////
+        // Function to handle selection change
+
+        function handleSelectionChange(selectedOption, rowNumber) {
+
+
+            // Remove any existing content in the resultContainer
+            switch (selectedOption) {
+                case '1': {
+                    var textBox = $('<input class="form-control" type="text" id="resultTextBox">');
+                }
+                    break;
+                case '2': {
+                    var textBox = $('<input class="btn btn-primary" type="button" value="button" id="resultTextBox">');
+                }
+                    break;
+                case '3': {
+                    var textBox = $('<input type="color" class="m-auto form - control form - control - color" id="resultTextBox" value = "#006600" > ');
+                }
+                    break;
+
+            }
+
+            $('#divRow' + rowNumber).empty();
+            $('#divRow' + rowNumber).append(textBox);
+
+            ///// just add value (for Show Only)/////
+            $('#divRow' + rowNumber).val('Selected option: ' + selectedOption);
+        }
+
+        // Function to handle adding a new row
+        function addNewRow() {
+
+            // Add a new row below the current row
+
+            var newRowNumber = $('#myTable tr').length;
+
+
+            var newRow = '<tr><th scope="row">' + newRowNumber + '</th><td>' +
+                '<select class="form-select mySelect"><option value="1">Text</option>' +
+                '<option value="2">Button</option>' +
+                '<option value="3">Color</option></select></td>' +
+                '<td><div class="form-floating resultContainer" id="divRow' + newRowNumber + '"><textarea class="form-control" placeholder="Leave a comment here" id = "floatingTextarea" ></textarea ></div></td></tr>';
+            // Set the id attributes dynamically based on the row number
+            newRow = $(newRow).attr('id', 'row' + newRowNumber);
+            // $('#myTable tr:last').after(newRow);
+            $('#myTable').append(newRow);
+
+
+        }
+        /////////////////////////////////////////////////////////////
+
+
+
+        // jQuery code to run when the selection changes within the table
+        $(document).ready(function () {
+
+            $('#myTable').on('change', '.mySelect', function () {
+
+                // alert($('.mySelect').val());
+                var selectedOption = $(this).val();
+
+                // Find the closest 'tr' (table row) to the selected 'select' element
+                var selectedRow = $(this).closest('tr');
+
+                // Get the row number based on its position in the table
+                var rowNumber = selectedRow.index() + 1;
+                // Set the ID of the selected 'select' element dynamically based on the row number
+                var selectId = 'selectRow' + rowNumber;
+                $('#' + selectId).attr('id', ''); // Clear the previous ID
+                $(this).attr('id', selectId); // Set the new ID
+
+
+                handleSelectionChange(selectedOption, rowNumber);
+
+            });
+
+
+            $('#btnAdd').on('click', function () {
+                // Add a new row below the current row
+
+                addNewRow();
+
+            });
+
+
+
+        });
+    </script>
+</body>
+
+</html>
